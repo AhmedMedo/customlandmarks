@@ -62,11 +62,12 @@ function initMap() {
      var HideButton =document.getElementById('hide');
      var LocationButton=document.getElementById('location');
      var rmdir=document.getElementById('rmdir');
-   var newmark=document.getElementById('newmark');
+      var newmark=document.getElementById('newmark');
       var map = new google.maps.Map(document.getElementById('map'), {
         center: center,
         zoom: 6
       });
+
 
 // var marker = new google.maps.Marker({
 //             position: pointB, //map Coordinates where user right clicked
@@ -139,45 +140,46 @@ function initMap() {
 
       // Try HTML5 geolocation.
       google.maps.event.addDomListener(LocationButton,'click',function(){
-                if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                   pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  };
+              //   if (navigator.geolocation) {
+              //   navigator.geolocation.getCurrentPosition(function(position) {
+              //      pos = {
+              //       lat: position.coords.latitude,
+              //       lng: position.coords.longitude
+              //     };
 
-                    // Create marker of User Location 
-                    create_marker(pos,'Your Location',map,' ',true,true,false,'icons/main.png',true);
+              //       // Create marker of User Location 
+              //       create_marker(pos,'Your Location',map,' ',true,true,false,'icons/main.png',true);
 
-                   map.setCenter(pos);
-                }, function(error) {
+              //      map.setCenter(pos);
+              //   }, function(error) {
 
 
 
-                   switch(error.code) {
-                          case error.PERMISSION_DENIED:
-                              alert("User denied the request for Geolocation.");
-                              break;
-                          case error.POSITION_UNAVAILABLE:
-                              alert("Location information is unavailable.");
-                              break;
-                          case error.TIMEOUT:
-                              alert("The request to get user location timed out.");
-                              break;
-                          case error.UNKNOWN_ERROR:
-                              alert("An unknown error occurred.");
-                              break;
-                      }
-                      // if I can't get my location create a dragabble marker with a draggaple event and Egypt center
-                      create_marker(center,'put your location manually',map,'',true,true,false,'icons/main.png',true);
+              //      switch(error.code) {
+              //             case error.PERMISSION_DENIED:
+              //                 alert("User denied the request for Geolocation.");
+              //                 break;
+              //             case error.POSITION_UNAVAILABLE:
+              //                 alert("Location information is unavailable.");
+              //                 break;
+              //             case error.TIMEOUT:
+              //                 alert("The request to get user location timed out.");
+              //                 break;
+              //             case error.UNKNOWN_ERROR:
+              //                 alert("An unknown error occurred.");
+              //                 break;
+              //         }
+              //         // if I can't get my location create a dragabble marker with a draggaple event and Egypt center
+              //         create_marker(center,'put your location manually',map,'',true,true,false,'icons/main.png',true);
 
                                     
-                },{enableHighAccuracy:true, timeout:60000, maximumAge:600000});
-              } else {
-                // Browser doesn't support Geolocation
-                alert("Browser doesn't support Geolocation and put yout location manually");
+              //   },{enableHighAccuracy:true, timeout:60000, maximumAge:600000});
+              // } else {
+              //   // Browser doesn't support Geolocation
+              //   alert("Browser doesn't support Geolocation and put yout location manually");
 
-              }
+              // }
+                      create_marker(center,'put your location manually',map,'',true,true,false,'icons/main.png',true);
 
               $('#location').hide();
 
@@ -215,7 +217,7 @@ function initMap() {
 
                   
 
-                alert("mob marker");
+               
               create_marker(center,'New Map',map,EditForm,true,true,true,icon,false);
 
                 });
@@ -338,9 +340,8 @@ function initMap() {
             //if the marker is a draggable of user to put his location track his location and calc distance
               if(ToHide){
                    google.maps.event.addListener(marker,'dragend',function(){
-          mylocation=this.getPosition();
-                    //alert(this.getPosition().lat());
-              });
+                         mylocation=this.getPosition();
+                       });
         
         
 
@@ -376,9 +377,7 @@ function initMap() {
                  var pos={lat,lng};
                 directionsDisplay.setMap(Mapp);
 
-
-
-                calculateAndDisplayRoute(directionsService, directionsDisplay,pos,marker.getPosition());
+                    calculateAndDisplayRoute(directionsService, directionsDisplay,pos,marker.getPosition());
 
                  }
                  
@@ -399,11 +398,6 @@ function initMap() {
                     }
                     
                     
-                   directionsDisplay.setMap(Mapp);
-
-
-
-                calculateAndDisplayRoute(directionsService, directionsDisplay,mylocation,marker.getPosition());
                    
                    
                  }
@@ -412,13 +406,17 @@ function initMap() {
         }else{
            //directionsDisplay.setMap(Mapp);
 
-            alert("no");
+                    alert("Browser doesn't Geolocation location service");
 
-                      calculateAndDisplayRoute(directionsService, directionsDisplay,mylocation,marker.getPosition());
+                      calculateAndDisplayRoute(directionsService, directionsDisplay,mylocation,this.getPosition());
           
           
         }
-                        
+              infowindow.close();
+
+                   directionsDisplay.setMap(Mapp);
+                   calculateAndDisplayRoute(directionsService, directionsDisplay,mylocation,this.getPosition());
+
 
             });
 
@@ -495,9 +493,10 @@ function initMap() {
   function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB) {
       
       directionsService.route({
-        origin: pointA,
-        destination: pointB,
-        travelMode: google.maps.TravelMode.DRIVING
+        origin: pointB,
+        destination: pointA,
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC
       }, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
           directionsDisplay.setDirections(response);
@@ -506,6 +505,28 @@ function initMap() {
         }
       });
     }
+    function geocodeLatLng(point, map) {
+        var geocoder = new google.maps.Geocoder;
+        
+        
+        geocoder.geocode({'location': point}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            if (results[1]) {
+            
+                results[1].formatted_address;
+               
+              
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+
+       
+
+      }
 
     </script>
 
