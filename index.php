@@ -449,8 +449,13 @@ function initMap() {
     else
     {
       //Remove saved marker from DB and map using jQuery Ajax
-      var mLatLang = Marker.getPosition().toUrlValue(); //get marker position
-      var myData = {del : 'true', latlang : mLatLang}; //post variables
+      // var mLatLang = Marker.getPosition().toUrlValue();
+      // // console.log(mLatLang); //get marker position
+      var lat =Marker.getPosition().lat();
+      var lng = Marker.getPosition().lng();
+      console.log(lat);
+      console.log(lng);
+      var myData = {del : 'true', lat :lat,lng:lng}; //post variables
       $.ajax({
         type: "POST",
         url: "process.php",
@@ -471,8 +476,10 @@ function initMap() {
   function save_marker(Marker, mName, mAddress, mType, replaceWin)
   {
     //Save new marker using jQuery Ajax
-    var mLatLang = Marker.getPosition().toUrlValue(); //get marker position
-    var myData = {name : mName, address : mAddress, latlang : mLatLang, type : mType }; //post variables
+    //var mLatLang = Marker.getPosition().toUrlValue(); //get marker position
+    var lat =Marker.getPosition().lat();
+    var lng = Marker.getPosition().lng();
+    var myData = {name : mName, address : mAddress, lat: lat,lng:lng ,type : mType }; //post variables
     console.log(replaceWin);    
     $.ajax({
       type: "POST",

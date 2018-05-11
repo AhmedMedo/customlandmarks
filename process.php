@@ -2,9 +2,9 @@
 //PHP 5 +
 
 // database settings 
-$db_username = 'marker';
-$db_password = 'marker';
-$db_name = 'markers';
+$db_username = 'root';
+$db_password = '';
+$db_name = 'marker';
 $db_host = 'localhost';
 
 //mysqli
@@ -70,9 +70,11 @@ if($_POST) //run only if there's a post data
 	}
 	
 	// get marker position and split it for database
-	$mLatLang	= explode(',',$_POST["latlang"]);
-	$mLat 		= filter_var($mLatLang[0], FILTER_VALIDATE_FLOAT);
-	$mLng 		= filter_var($mLatLang[1], FILTER_VALIDATE_FLOAT);
+	// $mLatLang	= explode(',',$_POST["latlang"]);
+	// $mLat 		= filter_var($mLatLang[0], FILTER_VALIDATE_FLOAT);
+	// $mLng 		= filter_var($mLatLang[1], FILTER_VALIDATE_FLOAT);
+	$mLat=$_POST['lat'];
+	$mLng=$_POST['lng'];
 	
 	//Delete Marker
 	if(isset($_POST["del"]) && $_POST["del"]==true)
